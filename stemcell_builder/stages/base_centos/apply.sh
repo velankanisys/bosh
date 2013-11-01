@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
 
 base_dir=$(readlink -nf $(dirname $0)/../..)
 source $base_dir/lib/prelude_apply.bash
@@ -22,8 +23,11 @@ INSTALL_YUM
 run_in_chroot $chroot "
 rpm --force --nodeps --install http://mirror.centos.org/centos/6/os/x86_64/Packages/centos-release-6-4.el6.centos.10.x86_64.rpm
 rpm --force --nodeps --install http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-yum --assumeyes groupinstall Base
-yum --assumeyes groupinstall 'Development Tools'
+#yum --assumeyes groupinstall Base
+#yum --assumeyes groupinstall 'Development Tools'
+yum -c /tmp/$(basename ${CUSTOM_YUM_CONF}) --assumeyes groupinstall Base
+yum -c /tmp/$(basename ${CUSTOM_YUM_CONF}) --assumeyes groupinstall 'Development Tools'
+yum -q history addon-info last saved_tx
 "
 
 touch ${chroot}/etc/sysconfig/network # must be present for network to be configured

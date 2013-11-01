@@ -40,3 +40,5 @@ run_in_chroot $chroot "
   rpm -i /rpmbuild/RPMS/${runit_version}.rpm
 "
 #/runit
+
+# clean up custom yum.conf
